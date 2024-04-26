@@ -136,8 +136,6 @@ function renderAllShapes() {
     return;
   }
   gl.uniformMatrix4fv(u_ModelMatrix, false, xformMatrix.elements);
-  //gl.clearColor(0, 0, 0, 1);
-  //gl.drawArrays(gl.TRIANGLES,0,3);
   
   gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
   drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);

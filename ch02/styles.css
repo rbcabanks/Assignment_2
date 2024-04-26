@@ -3,11 +3,9 @@ body {
     outline-style: solid;
     margin: 3%;
     padding: 30px;
-    border-radius: 10%;
     border-style: inset;
 }
 canvas{
-    border-radius: 10%;
     border-color: rgb(189, 46, 117);
 }
 h1 {
