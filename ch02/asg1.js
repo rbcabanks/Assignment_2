@@ -2,16 +2,18 @@
 // Vertex shader program
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
+  'uniform mat4 u_ModelMatrix;\n' +
   'uniform float u_Size;\n' +
   'void main() {\n' +
-  '  gl_Position = a_Position;\n' +
+  '  gl_Position = u_ModelMatrix * a_Position;\n' +
+  //'gl_Position =a_Position;\n'+
   '  gl_PointSize = u_Size;\n' +
   '}\n';
 
 // Fragment shader program
 var FSHADER_SOURCE =
   'precision mediump float;\n' +
-  'uniform vec4 u_FragColor;\n' +  // uniform変数
+  'uniform vec4 u_FragColor;\n' +  
   'void main() {\n' +
   '  gl_FragColor = u_FragColor;\n' +
   '}\n';
@@ -39,6 +41,7 @@ let g_eql=false
 var g_shapesList = [];
 let bonsaiSaveArray=[]
 let refImage=document.getElementById('img2')
+let u_ModelMatrix;
 
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
   document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
@@ -71,6 +74,8 @@ function setupWebGL() {
   // Get the rendering context for WebGL
   //gl = getWebGLContext(canvas);
   gl = canvas.getContext("webgl", { preserveDrawingBuffer: true }); // magic runtime code
+  gl.enable(gl.DEPTH_TEST);
+
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
     return;
@@ -103,29 +108,58 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_Size');
     return;
   }
+  u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+  if (!u_ModelMatrix) {
+    console.log('Failed to get the storage location of u_ModelMatrix');
+    return;
+  }
 
 }
 
 function printBonsai(){
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   // created a second 2d canvas to show my own image so I didn't have to write all the complexities needed to print a 2d image in the background of the webgl canvas.  
   const canvas2 = document.getElementById("secondcanv");
-  const ctx = canvas2.getContext("2d");
-  const imag = document.getElementById("img");
-  ctx.drawImage(imag,-80,-30,1460,800);
+  //const ctx = canvas2.getContext("2d");
+  //const imag = document.getElementById("img");
+  //ctx.drawImage(imag,-80,-30,1460,800);
 }
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  var xformMatrix = new Matrix4();
+  var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix'); //
+  if (!u_xformMatrix) {
+    console.log('Failed to get the storage location of u_xformMatrix');
+    return;
+  }
+  gl.uniformMatrix4fv(u_ModelMatrix, false, xformMatrix.elements);
+  //gl.clearColor(0, 0, 0, 1);
+  //gl.drawArrays(gl.TRIANGLES,0,3);
+  
+  gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
+  drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
+
+  gl.uniform4f(u_FragColor,1,0,0,1);
+  drawCube([0,0,0,1,1,0,1,0,0,
+    //triangle 2 
+    0,0,0,0,1,0,1,1,0]);
+
+
   //var len = g_points.length;
+  /*
   var len = g_shapesList.length;
 
   for (var i = 0; i < len; i++) {
     g_shapesList[i].render();
   }
+  */
   //var duration = performance.now() - startTime;
   //sendTextToHTML("numdot: " + len + " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000 / duration),'numdot')
+
+  
 
 }
 /*function sendTextToHTML(text, htmlID) {
@@ -149,7 +183,8 @@ function main() {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  renderAllShapes();
 }
 
 /*
