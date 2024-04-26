@@ -3,9 +3,10 @@
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
   'uniform mat4 u_ModelMatrix;\n' +
+  'uniform mat4 u_GlobalRotateMatrix;\n' +
   'uniform float u_Size;\n' +
   'void main() {\n' +
-  '  gl_Position = u_ModelMatrix * a_Position;\n' +
+  '  gl_Position = u_GlobalRotateMatrix* u_ModelMatrix * a_Position;\n' +
   //'gl_Position =a_Position;\n'+
   '  gl_PointSize = u_Size;\n' +
   '}\n';
@@ -43,8 +44,9 @@ let bonsaiSaveArray=[]
 let refImage=document.getElementById('img2')
 let u_ModelMatrix;
 
+let gAnimalGlobalRotation=0;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
-  document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
+  /*document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('delete').onclick = function () { g_shapesList.splice(-1); renderAllShapes();}; // wanted to add this function because thought it might be helpful for drawing 
   //document.getElementById('bonsai').onclick = function () {saveBonsai(); console.log(g_shapesList);};
   document.getElementById('bonsaip').onclick = function () {canvas.style.display = "none"; renderAllShapes(); display2.style.display="block"; refImage.style.display="block";printBonsai();};
@@ -63,6 +65,9 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
   document.getElementById('eql').onclick = function () {if(g_eql==false){g_eql=true}else{g_eql=false};};
   document.getElementById('width').addEventListener('mouseup', function () { g_width= this.value; console.log('g_width'+g_width);}); //g_selectedColor[0]=this.value/100;
   document.getElementById('height').addEventListener('mouseup', function () { g_height= this.value; }); //g_selectedColor[0]=this.value/100;
+*/
+  document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
+
 }
 
 function setupWebGL() {
@@ -113,6 +118,11 @@ function connectVariablesToGLSL() {
     console.log('Failed to get the storage location of u_ModelMatrix');
     return;
   }
+  u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
+  if (!u_GlobalRotateMatrix) {
+    console.log('Failed to get the storage location of u_GlobalRotateMatrix');
+    return;
+  }
 
 }
 
@@ -127,7 +137,11 @@ function printBonsai(){
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  console.log(gAnimalGlobalRotation);
+  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,1,0);
+  gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
   var xformMatrix = new Matrix4();
   var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix'); //
