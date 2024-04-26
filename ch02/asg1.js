@@ -66,7 +66,8 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
   document.getElementById('width').addEventListener('mouseup', function () { g_width= this.value; console.log('g_width'+g_width);}); //g_selectedColor[0]=this.value/100;
   document.getElementById('height').addEventListener('mouseup', function () { g_height= this.value; }); //g_selectedColor[0]=this.value/100;
 */
-  document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
+  //document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
+  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
 
 }
 
@@ -141,7 +142,6 @@ function renderAllShapes() {
   console.log(gAnimalGlobalRotation);
   var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
-  gl.clear(gl.COLOR_BUFFER_BIT);
 
   var xformMatrix = new Matrix4();
   var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix'); //
@@ -150,7 +150,9 @@ function renderAllShapes() {
     return;
   }
   gl.uniformMatrix4fv(u_ModelMatrix, false, xformMatrix.elements);
-  
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
   gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
   drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
 
@@ -159,6 +161,8 @@ function renderAllShapes() {
     //triangle 2 
     0,0,0,0,1,0,1,1,0]);
 
+  gl.uniform4f(u_FragColor,0,0,1,1); //color of triangle
+  drawTriangle3D([-1,0,0,-.5,-1,0,1,1,1]);
 
   //var len = g_points.length;
   /*
