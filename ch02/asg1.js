@@ -140,22 +140,20 @@ function renderScene(){
   //drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
   
   let translateM= new Matrix4();
-  translateM.setTranslate(.5,.5,0);
+  translateM.setTranslate(0,-.5,0);
 
   let rotateM= new Matrix4();
-  rotateM.setRotate(45,0,0,1);
+  rotateM.setRotate(45,.5,.5,.5);
 
   let scaleM= new Matrix4();
-  scaleM.setScale(.5,1.5,1);
+  scaleM.setScale(.5,.5,.5);
 
   let modelMatrix=new Matrix4();
   modelMatrix.multiply(translateM);
   modelMatrix.multiply(rotateM);
   modelMatrix.multiply(scaleM);
 
-  gl.uniform4f(u_FragColor,0,0,1,1); //color of triangle
   drawCube(modelMatrix);
-
 
 }
 function renderAllShapes() {

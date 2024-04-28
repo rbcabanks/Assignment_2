@@ -14,8 +14,106 @@ class Cube {
     }
 }
 function drawCube(vertices) {
-  //gl.uniformMatrix4fv(u_translateM,false,vertices.elements);
-  var n = 3 // number of vertices
+  var face1  = new Float32Array([
+    1.0,-1.0,1.0, // triangle 1 : begin
+    1.0,-1.0,-1.0,
+    1.0, 1.0,-1.0, // triangle 1 : end
+    1.0, -1.0,1.0, // triangle 2 : begin
+    1.0,1.0,-1.0,
+    1.0, 1.0,1.0, // triangle 2 : end
+  ]);
+
+  var face2  = new Float32Array([  
+    -1.0,-1.0,-1.0,
+    -1.0,-1.0,1.0,
+    -1.0,1.0,1.0,
+    -1.0,-1.0,-1.0,
+    -1.0,1.0,1.0,
+    -1.0,1.0,-1.0,
+  ]);
+
+  var face3  = new Float32Array([
+    1.0,1.0,1.0,
+    -1.0, 1.0, 1.0,
+    -1.0,-1.0,1.0,
+    1.0,1.0, 1.0,
+    -1.0,-1.0, 1.0,
+    1.0,-1.0, 1.0,
+  ]); 
+
+  var face4  = new Float32Array([
+    1.0,-1.0, -1.0,
+  -1.0,-1.0, -1.0,
+  -1.0,1.0, -1.0,
+  1.0, -1.0, -1.0,
+  -1.0,1.0,-1.0,
+  1.0, 1.0,-1.0,
+  ]);
+
+  var face5  = new Float32Array([
+    1.0,1.0,-1.0,
+    -1.0, 1.0, -1.0,
+    -1.0,1.0, 1.0,
+    1.0, 1.0, -1.0,
+    1.0, 1.0,1.0,
+    -1.0, 1.0,1.0,
+  ]);
+
+  var face6  = new Float32Array([
+    1.0, -1.0, -1.0,
+    -1.0,-1.0,-1.0,
+    -1.0, -1.0, 1.0,
+    1.0, -1.0, -1.0,
+    1.0, -1.0, 1.0,
+    -1.0,-1.0, 1.0
+  ]);
+
+
+  var verticesCube = new Float32Array([   // Vertex coordinates
+  -1.0,-1.0,-1.0, // triangle 1 : begin
+  -1.0,-1.0, 1.0,
+  -1.0, 1.0, 1.0, // triangle 1 : end
+  1.0, 1.0,-1.0, // triangle 2 : begin
+  -1.0,-1.0,-1.0,
+  -1.0, 1.0,-1.0, // triangle 2 : end
+
+  1.0,-1.0, 1.0,
+  -1.0,-1.0,-1.0,
+  1.0,-1.0,-1.0,
+  1.0, 1.0,-1.0,
+  1.0,-1.0,-1.0,
+  -1.0,-1.0,-1.0,
+
+  -1.0,-1.0,-1.0,
+  -1.0, 1.0, 1.0,
+  -1.0, 1.0,-1.0,
+  1.0,-1.0, 1.0,
+  -1.0,-1.0, 1.0,
+  -1.0,-1.0,-1.0,
+
+  -1.0, 1.0, 1.0,
+  -1.0,-1.0, 1.0,
+  1.0,-1.0, 1.0,
+  1.0, 1.0, 1.0,
+  1.0,-1.0,-1.0,
+  1.0, 1.0,-1.0,
+
+  1.0,-1.0,-1.0,
+  1.0, 1.0, 1.0,
+  1.0,-1.0, 1.0,
+  1.0, 1.0, 1.0,
+  1.0, 1.0,-1.0,
+  -1.0, 1.0,-1.0,
+
+  1.0, 1.0, 1.0,
+  -1.0, 1.0,-1.0,
+  -1.0, 1.0, 1.0,
+  1.0, 1.0, 1.0,
+  -1.0, 1.0, 1.0,
+  1.0,-1.0, 1.0
+  ]);
+
+  //var n = 3 // number of vertices
   
     // creating buffer object
     var vertexBuffer = gl.createBuffer();
@@ -26,9 +124,10 @@ function drawCube(vertices) {
     // bind the buffer object to the target
     gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
     // write date into buffer object
-    var first= new Float32Array([0,0,0,1,1,0,1,0,0]);  
+
+    //var first= new Float32Array([0,0,0,1,1,0,1,0,0]);  
     
-    var second= new Float32Array([0,0,0,0,1,0,1,1,0]);  
+    //var second= new Float32Array([0,0,0,0,1,0,1,1,0]);  
 
     var a_Position = gl.getAttribLocation(gl.program,'a_Position');
     if(a_Position<0){
@@ -40,11 +139,42 @@ function drawCube(vertices) {
 
     //Enable the assignment to a_Position variable
     gl.enableVertexAttribArray(a_Position);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(first),gl.DYNAMIC_DRAW);
+/*
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesCube),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,0,0,1,1); //color of triangle
 
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
-    
-    gl.drawArrays(gl.TRIANGLES,0,n);
+    gl.drawArrays(gl.TRIANGLES,0, verticesCube.length/3);*/
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face1),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,1,1,1,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face1.length/3);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face2),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,1,0,0,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face2.length/3);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face3),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,0,0,.8,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face3.length/3);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face4),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,.5,0,.7,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face4.length/3);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face5),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,0,.5,.6,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face5.length/3);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face6),gl.DYNAMIC_DRAW);
+    gl.uniform4f(u_FragColor,0,.5,.2,1); //color of triangle
+    gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
+    gl.drawArrays(gl.TRIANGLES,0, face6.length/3);
 }
 
 /*
