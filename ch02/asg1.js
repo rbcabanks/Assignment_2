@@ -46,7 +46,7 @@ let refImage=document.getElementById('img2')
 let u_ModelMatrix;
 let g_rLeg=15;
 let g_lLeg=15;
-
+let wings=10;
 
 let gAnimalGlobalRotation=0;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
@@ -74,6 +74,7 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('rLeg').addEventListener('mousemove', function () {g_rLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('lLeg').addEventListener('mousemove', function () {g_lLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+ document.getElementById('wings').addEventListener('mousemove', function () {wings=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
 
 
 }
@@ -240,9 +241,16 @@ function renderScene(){
   drawCube(modelMatrix);
 
   
+  let moveUp; 
+  if(wings==10){
+    moveUp=0;
+  }
+  else{
+    moveUp=(wings-10)/1200;
+  }
   //left wing bottom
-  translateM.setTranslate(-.2,-.04,.2);
-  rotateM.setRotate(10,0,0,-.15);
+  translateM.setTranslate(-.2-moveUp/2,-.04+moveUp,.2);
+  rotateM.setRotate(5+wings/2,0,0,-.15);
   scaleM.setScale(.02,.16,.26);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
@@ -252,8 +260,8 @@ function renderScene(){
   drawCube(modelMatrix);
 
   //right wing bottom
-  translateM.setTranslate(.2,-.04,.2);
-  rotateM.setRotate(-10,0,0,-.15);
+  translateM.setTranslate(.2+moveUp/2,-.04+moveUp,.2);
+  rotateM.setRotate(-(5+wings/2),0,0,-.15);
   scaleM.setScale(.02,.16,.26);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
@@ -306,7 +314,6 @@ function renderScene(){
     else{
       aboveN=1.5;
     }
-    console.log(g_rLeg);
     translateM.setTranslate(.055,-.55,.26+aboveN*(moveBack));
     rotateM.setRotate(Math.abs(g_rLeg/2),.5,0,0);
     scaleM.setScale(.03,.18,.03);
