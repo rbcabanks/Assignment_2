@@ -147,32 +147,32 @@ function drawCube(vertices) {
     gl.drawArrays(gl.TRIANGLES,0, verticesCube.length/3);*/
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face1),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,1,1,1,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.9, rgba[1]*.9, rgba[2]*.9, rgba[3]*.9);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face1.length/3);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face2),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,1,0,0,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.8, rgba[1]*.8, rgba[2]*.8, rgba[3]*.8);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face2.length/3);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face3),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,0,0,.8,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.7, rgba[1]*.7, rgba[2]*.7, rgba[3]*.7);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face3.length/3);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face4),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,.5,0,.7,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.6, rgba[1]*.6, rgba[2]*.6, rgba[3]*.6);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face4.length/3);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face5),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,0,.5,.6,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.5, rgba[1]*.5, rgba[2]*.5, rgba[3]*.5);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face5.length/3);
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(face6),gl.DYNAMIC_DRAW);
-    gl.uniform4f(u_FragColor,0,.5,.2,1); //color of triangle
+    gl.uniform4f(u_FragColor, rgba[0]*.4, rgba[1]*.4, rgba[2]*.4, rgba[3]*.4);
     gl.uniformMatrix4fv(u_ModelMatrix,false,vertices.elements);
     gl.drawArrays(gl.TRIANGLES,0, face6.length/3);
 }

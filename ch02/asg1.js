@@ -27,6 +27,7 @@ const CIRCLE = 2;
 let canvas;
 let display2;
 let gl;
+let rgba;
 let a_Position;
 let u_FragColor;
 let u_Size;
@@ -153,6 +154,7 @@ function renderScene(){
   modelMatrix.multiply(rotateM);
   modelMatrix.multiply(scaleM);
 
+  rgba=[1,0,1,1];
   drawCube(modelMatrix);
 
 }
