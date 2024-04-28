@@ -135,7 +135,7 @@ function printBonsai(){
 
 function renderScene(){
   renderAllShapes();
-
+  //gl.enable(gl.DEPTH_TEST);
   
   //gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
   //drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
@@ -156,6 +156,53 @@ function renderScene(){
   //head
   drawCube(modelMatrix);
 
+  
+
+  //beak
+  translateM.setTranslate(0,.48,-.18);
+  rotateM.setRotate(-5,.1,0,0);
+  scaleM.setScale(.07,.06,.10);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.7,.7,.7,1];
+  drawCube(modelMatrix);
+
+  //beak
+  translateM.setTranslate(0,.50,-.3);
+  rotateM.setRotate(-5,.1,0,0);
+  scaleM.setScale(.07,.03,.03);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.7,.7,.7,1];
+  drawCube(modelMatrix);
+
+  //beak
+  translateM.setTranslate(0,.42,-.3);
+  rotateM.setRotate(-5,.1,0,0);
+  scaleM.setScale(.07,.07,.03);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.02,.02,.02,1];
+  drawCube(modelMatrix);
+
+  //beak
+  translateM.setTranslate(0,.40,-.25);
+  rotateM.setRotate(-5,.1,0,0);
+  scaleM.setScale(.07,.07,.06);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.02,.02,.02,1];
+  drawCube(modelMatrix);
+  
+
   //neck
   translateM.setTranslate(0,.2,.025);
   rotateM.setRotate(10,.1,0,0);
@@ -168,14 +215,125 @@ function renderScene(){
   drawCube(modelMatrix);
 
   //body
-  translateM.setTranslate(0,-.03,.2);
-  scaleM.setScale(.16,.15,.26);
+  translateM.setTranslate(0,-.06,.2);
+  scaleM.setScale(.165,.18,.26);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
   //modelMatrix.multiply(rotateM);
   modelMatrix.multiply(scaleM);
   rgba=[.8,.1,.6,1];
   drawCube(modelMatrix);
+
+  //left wing bottom
+  translateM.setTranslate(-.2,-.04,.2);
+  rotateM.setRotate(10,0,0,-.15);
+  scaleM.setScale(.02,.16,.26);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.8,.1,.5,1];
+  drawCube(modelMatrix);
+
+  //right wing bottom
+  translateM.setTranslate(.2,-.04,.2);
+  rotateM.setRotate(-10,0,0,-.15);
+  scaleM.setScale(.02,.16,.26);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.8,.1,.5,1];
+  drawCube(modelMatrix);
+
+   //leg left
+   translateM.setTranslate(-.055,-.3,.25);
+   rotateM.setRotate(15,-.5,0,0);
+   scaleM.setScale(.03,.17,.03);
+   modelMatrix.setIdentity();
+   modelMatrix.multiply(translateM);
+   modelMatrix.multiply(rotateM);
+   modelMatrix.multiply(scaleM);
+   rgba=[.6,.3,.6,1];
+   drawCube(modelMatrix);
+
+    //right left
+    translateM.setTranslate(.055,-.3,.25);
+    rotateM.setRotate(15,-.5,0,0);
+    scaleM.setScale(.03,.17,.03);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+      //joint leg right
+      translateM.setTranslate(.055,-.45,.28);
+      rotateM.setRotate(10,-.5,0,0);
+      scaleM.setScale(.04,.05,.06);
+      modelMatrix.setIdentity();
+      modelMatrix.multiply(translateM);
+      modelMatrix.multiply(rotateM);
+      modelMatrix.multiply(scaleM);
+      rgba=[.8,.1,.6,1];
+      drawCube(modelMatrix);
+
+      //joint leg left
+      translateM.setTranslate(-.055,-.45,.28);
+      rotateM.setRotate(10,-.5,0,0);
+      scaleM.setScale(.04,.05,.06);
+      modelMatrix.setIdentity();
+      modelMatrix.multiply(translateM);
+      modelMatrix.multiply(rotateM);
+      modelMatrix.multiply(scaleM);
+      rgba=[.8,.1,.6,1];
+      drawCube(modelMatrix);
+
+    //right bottom
+    translateM.setTranslate(.055,-.55,.25);
+    rotateM.setRotate(15,.5,0,0);
+    scaleM.setScale(.03,.17,.03);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+    // left bottom
+    translateM.setTranslate(-.055,-.55,.25);
+    rotateM.setRotate(15,.5,0,0);
+    scaleM.setScale(.03,.17,.03);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+    // left bottom floor
+    translateM.setTranslate(-.055,-.72,.14);
+    //rotateM.setRotate(15,.5,0,0);
+    scaleM.setScale(.035,.015,.09);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    //modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+    
+    // right bottom floor
+    translateM.setTranslate(.055,-.72,.14);
+    //rotateM.setRotate(15,.5,0,0);
+    scaleM.setScale(.035,.015,.09);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    //modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
 
 }
 function renderAllShapes() {
