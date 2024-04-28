@@ -156,6 +156,15 @@ function renderScene(){
   //head
   drawCube(modelMatrix);
 
+  translateM.setTranslate(0,.5,-.35);
+  //rotateM.setRotate(5,-.1,0,0);
+  scaleM.setScale(1.1,.2,.2);
+  modelMatrix.multiply(translateM);
+  //modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.01,.01,.01,1];
+  //eyes
+  drawCube(modelMatrix);
   
 
   //beak
