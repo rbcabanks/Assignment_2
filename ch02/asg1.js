@@ -141,38 +141,47 @@ function renderScene(){
   //drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
   
   let translateM= new Matrix4();
-  translateM.setTranslate(0,.5,0);
-
   let rotateM= new Matrix4();
-  rotateM.setRotate(20,-.1,.1,0);
-
   let scaleM= new Matrix4();
-  scaleM.setScale(.13,.1,.15);
-
   let modelMatrix=new Matrix4();
+
+
+  translateM.setTranslate(0,.5,0);
+  rotateM.setRotate(5,-.1,0,0);
+  scaleM.setScale(.13,.1,.15);
   modelMatrix.multiply(translateM);
   modelMatrix.multiply(rotateM);
   modelMatrix.multiply(scaleM);
-  rgba=[1,0,1,1];
+  rgba=[1,.1,.7,1];
   //head
   drawCube(modelMatrix);
 
   //neck
-  translateM.setTranslate(0,.3,.05);
-  rotateM.setRotate(20,.3,.9,0);
-  scaleM.setScale(.07,.25,.07);
+  translateM.setTranslate(0,.2,.025);
+  rotateM.setRotate(10,.1,0,0);
+  scaleM.setScale(.07,.27,.07);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
   modelMatrix.multiply(rotateM);
   modelMatrix.multiply(scaleM);
-  rgba=[.9,0,.9,1];
+  rgba=[.9,.1,.7,1];
+  drawCube(modelMatrix);
+
+  //body
+  translateM.setTranslate(0,-.03,.2);
+  scaleM.setScale(.16,.15,.26);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  //modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.8,.1,.6,1];
   drawCube(modelMatrix);
 
 }
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,1,0);
+  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,-1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
 
   var xformMatrix = new Matrix4();
