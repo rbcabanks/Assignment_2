@@ -44,6 +44,8 @@ var g_shapesList = [];
 let bonsaiSaveArray=[]
 let refImage=document.getElementById('img2')
 let u_ModelMatrix;
+let g_rLeg=15;
+let g_lLeg=15;
 
 
 let gAnimalGlobalRotation=0;
@@ -69,7 +71,10 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
   document.getElementById('height').addEventListener('mouseup', function () { g_height= this.value; }); //g_selectedColor[0]=this.value/100;
 */
   //document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
-  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+ document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+ document.getElementById('rLeg').addEventListener('mousemove', function () {g_rLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+ document.getElementById('lLeg').addEventListener('mousemove', function () {g_lLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+
 
 }
 
@@ -257,20 +262,25 @@ function renderScene(){
   rgba=[.8,.1,.5,1];
   drawCube(modelMatrix);
 
-   //leg left
-   translateM.setTranslate(-.055,-.3,.25);
-   rotateM.setRotate(15,-.5,0,0);
-   scaleM.setScale(.03,.17,.03);
-   modelMatrix.setIdentity();
-   modelMatrix.multiply(translateM);
-   modelMatrix.multiply(rotateM);
-   modelMatrix.multiply(scaleM);
-   rgba=[.6,.3,.6,1];
-   drawCube(modelMatrix);
+  let moveBackL;
+    if(g_lLeg==15){
+      moveBackL=0;
+    }
+    else{
+      moveBackL=(g_lLeg-15)/500;
+    }
 
-    //right left
-    translateM.setTranslate(.055,-.3,.25);
-    rotateM.setRotate(15,-.5,0,0);
+    //right leg
+    let moveBack;
+    if(g_rLeg==15){
+      moveBack=0;
+    }
+    else{
+      moveBack=(g_rLeg-15)/500;
+    }
+
+    translateM.setTranslate(.055,-.3,.25+(moveBack));
+    rotateM.setRotate(g_rLeg,-.5,0,0);
     scaleM.setScale(.03,.17,.03);
     modelMatrix.setIdentity();
     modelMatrix.multiply(translateM);
@@ -278,32 +288,38 @@ function renderScene(){
     modelMatrix.multiply(scaleM);
     rgba=[.6,.3,.6,1];
     drawCube(modelMatrix);
-
-      //joint leg right
-      translateM.setTranslate(.055,-.45,.28);
-      rotateM.setRotate(10,-.5,0,0);
-      scaleM.setScale(.04,.05,.06);
-      modelMatrix.setIdentity();
-      modelMatrix.multiply(translateM);
-      modelMatrix.multiply(rotateM);
-      modelMatrix.multiply(scaleM);
-      rgba=[.8,.1,.6,1];
-      drawCube(modelMatrix);
-
-      //joint leg left
-      translateM.setTranslate(-.055,-.45,.28);
-      rotateM.setRotate(10,-.5,0,0);
-      scaleM.setScale(.04,.05,.06);
-      modelMatrix.setIdentity();
-      modelMatrix.multiply(translateM);
-      modelMatrix.multiply(rotateM);
-      modelMatrix.multiply(scaleM);
-      rgba=[.8,.1,.6,1];
-      drawCube(modelMatrix);
+    
+    //right joint
+    var rLegMatrix=new Matrix4();
+    rLegMatrix.set(modelMatrix);
+    rLegMatrix.scale(1.6,.28, 1.7);
+    rLegMatrix.translate(0,-2.6,0);
+    rLegMatrix.rotate(g_rLeg/1.5,.5,0,0);
+    rgba=[.8,.1,.6,1];
+    drawCube(rLegMatrix);
 
     //right bottom
-    translateM.setTranslate(.055,-.55,.25);
-    rotateM.setRotate(15,.5,0,0);
+    let aboveN=1.5;
+    if(g_rLeg<-11){
+      aboveN=2.4;
+    }
+    else{
+      aboveN=1.5;
+    }
+    console.log(g_rLeg);
+    translateM.setTranslate(.055,-.55,.26+aboveN*(moveBack));
+    rotateM.setRotate(Math.abs(g_rLeg/2),.5,0,0);
+    scaleM.setScale(.03,.18,.03);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+    //left leg 
+    translateM.setTranslate(-.055,-.3,.25+(moveBackL));
+    rotateM.setRotate(g_lLeg,-.5,0,0);
     scaleM.setScale(.03,.17,.03);
     modelMatrix.setIdentity();
     modelMatrix.multiply(translateM);
@@ -312,10 +328,28 @@ function renderScene(){
     rgba=[.6,.3,.6,1];
     drawCube(modelMatrix);
 
+
+    //right joint
+    var lLegMatrix=new Matrix4();
+    lLegMatrix.set(modelMatrix);
+    lLegMatrix.scale(1.6,.28, 1.7);
+    lLegMatrix.translate(0,-2.6,0);
+    lLegMatrix.rotate(g_lLeg/1.5,.5,0,0);
+    rgba=[.8,.1,.6,1];
+    drawCube(lLegMatrix);
+
+    let aboveN2=1.5;
+    if(g_lLeg<-11){
+      aboveN2=2.4;
+    }
+    else{
+      aboveN2=1.5;
+    }
+
     // left bottom
-    translateM.setTranslate(-.055,-.55,.25);
-    rotateM.setRotate(15,.5,0,0);
-    scaleM.setScale(.03,.17,.03);
+    translateM.setTranslate(-.055,-.55,.26+aboveN2*(moveBackL));
+    rotateM.setRotate(Math.abs(g_lLeg/2),.5,0,0);
+    scaleM.setScale(.03,.18,.03);
     modelMatrix.setIdentity();
     modelMatrix.multiply(translateM);
     modelMatrix.multiply(rotateM);
