@@ -348,7 +348,7 @@ function renderScene(){
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,-1,0);
+  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,-.7,-4,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
 
   var xformMatrix = new Matrix4();
