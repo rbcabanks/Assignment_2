@@ -144,7 +144,7 @@ function renderScene(){
   translateM.setTranslate(0,-.5,0);
 
   let rotateM= new Matrix4();
-  rotateM.setRotate(45,.5,.5,.5);
+  rotateM.setRotate(-15,.5,.5,0);
 
   let scaleM= new Matrix4();
   scaleM.setScale(.5,.5,.5);
