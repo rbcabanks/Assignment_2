@@ -48,7 +48,7 @@ let g_rLeg=15;
 let g_lLeg=15;
 let wings=10;
 
-let gAnimalGlobalRotation=0;
+let gAnimalGlobalRotation=30;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
   /*document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
   document.getElementById('delete').onclick = function () { g_shapesList.splice(-1); renderAllShapes();}; // wanted to add this function because thought it might be helpful for drawing 
@@ -324,6 +324,19 @@ function renderScene(){
     rgba=[.6,.3,.6,1];
     drawCube(modelMatrix);
 
+    
+    // right bottom floor
+    translateM.setTranslate(.055,-.74+aboveN/55,.22+(aboveN*(moveBack)-.05));
+    rotateM.setRotate((.09-g_rLeg/2),.5,0,0);
+    scaleM.setScale(.05,.03,.09);
+    modelMatrix.setIdentity();
+    modelMatrix.multiply(translateM);
+    modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(scaleM);
+    rgba=[.6,.3,.6,1];
+    drawCube(modelMatrix);
+
+
     //left leg 
     translateM.setTranslate(-.055,-.3,.25+(moveBackL));
     rotateM.setRotate(g_lLeg,-.5,0,0);
@@ -336,7 +349,7 @@ function renderScene(){
     drawCube(modelMatrix);
 
 
-    //right joint
+    //left joint
     var lLegMatrix=new Matrix4();
     lLegMatrix.set(modelMatrix);
     lLegMatrix.scale(1.6,.28, 1.7);
@@ -346,13 +359,17 @@ function renderScene(){
     drawCube(lLegMatrix);
 
     let aboveN2=1.5;
-    if(g_lLeg<-11){
-      aboveN2=2.4;
+    if(g_lLeg<=-3){
+      if(aboveN2<2.4){
+        aboveN2=aboveN2+1;
+      }
     }
     else{
-      aboveN2=1.5;
+      if(aboveN2>1.5){
+        aboveN2=aboveN2-1;
+      }
     }
-
+    console.log(aboveN2);
     // left bottom
     translateM.setTranslate(-.055,-.55,.26+aboveN2*(moveBackL));
     rotateM.setRotate(Math.abs(g_lLeg/2),.5,0,0);
@@ -365,24 +382,12 @@ function renderScene(){
     drawCube(modelMatrix);
 
     // left bottom floor
-    translateM.setTranslate(-.055,-.72,.14);
-    //rotateM.setRotate(15,.5,0,0);
-    scaleM.setScale(.035,.015,.09);
+    translateM.setTranslate(-.055,-.74+aboveN2/55,.22+(aboveN2*(moveBackL)-.05));
+    rotateM.setRotate((.09-g_lLeg/2),.5,0,0);
+    scaleM.setScale(.05,.03,.09);
     modelMatrix.setIdentity();
     modelMatrix.multiply(translateM);
-    //modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-
-    
-    // right bottom floor
-    translateM.setTranslate(.055,-.72,.14);
-    //rotateM.setRotate(15,.5,0,0);
-    scaleM.setScale(.035,.015,.09);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    //modelMatrix.multiply(rotateM);
+    modelMatrix.multiply(rotateM);
     modelMatrix.multiply(scaleM);
     rgba=[.6,.3,.6,1];
     drawCube(modelMatrix);
@@ -391,7 +396,7 @@ function renderScene(){
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,-.7,-4,0);
+  var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,-4,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
 
   var xformMatrix = new Matrix4();
