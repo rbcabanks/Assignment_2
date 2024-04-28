@@ -67,25 +67,21 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
   document.getElementById('height').addEventListener('mouseup', function () { g_height= this.value; }); //g_selectedColor[0]=this.value/100;
 */
   //document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
-  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
+  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
 
 }
 
 function setupWebGL() {
   // Retrieve <canvas> element
   canvas = document.getElementById('webgl');
-  display2 = document.getElementById("secondcanv");
-  display2.style.display="none";
-
-  // Get the rendering context for WebGL
-  //gl = getWebGLContext(canvas);
   gl = canvas.getContext("webgl", { preserveDrawingBuffer: true }); // magic runtime code
-  gl.enable(gl.DEPTH_TEST);
 
   if (!gl) {
     console.log('Failed to get the rendering context for WebGL');
     return;
   }
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
+  gl.enable(gl.DEPTH_TEST);
 }
 
 function connectVariablesToGLSL() {
@@ -135,11 +131,36 @@ function printBonsai(){
   //const imag = document.getElementById("img");
   //ctx.drawImage(imag,-80,-30,1460,800);
 }
+
+function renderScene(){
+  renderAllShapes();
+
+  
+  //gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
+  //drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
+  
+  let translateM= new Matrix4();
+  translateM.setTranslate(.5,.5,0);
+
+  let rotateM= new Matrix4();
+  rotateM.setRotate(45,0,0,1);
+
+  let scaleM= new Matrix4();
+  scaleM.setScale(.5,1.5,1);
+
+  let modelMatrix=new Matrix4();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+
+  gl.uniform4f(u_FragColor,0,0,1,1); //color of triangle
+  drawCube(modelMatrix);
+
+
+}
 function renderAllShapes() {
   //var startTime = performance.now();
   // Clear <canvas>
-
-  console.log(gAnimalGlobalRotation);
   var globalRotMat=new Matrix4().rotate(gAnimalGlobalRotation,0,1,0);
   gl.uniformMatrix4fv(u_GlobalRotateMatrix,false,globalRotMat.elements);
 
@@ -151,56 +172,25 @@ function renderAllShapes() {
   }
   gl.uniformMatrix4fv(u_ModelMatrix, false, xformMatrix.elements);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-
-  gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
-  drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
-
-  gl.uniform4f(u_FragColor,1,0,0,1);
-  drawCube([0,0,0,1,1,0,1,0,0,
-    //triangle 2 
-    0,0,0,0,1,0,1,1,0]);
-
-  gl.uniform4f(u_FragColor,0,0,1,1); //color of triangle
-  drawTriangle3D([-1,0,0,-.5,-1,0,1,1,1]);
-
-  //var len = g_points.length;
-  /*
-  var len = g_shapesList.length;
-
-  for (var i = 0; i < len; i++) {
-    g_shapesList[i].render();
-  }
-  */
-  //var duration = performance.now() - startTime;
-  //sendTextToHTML("numdot: " + len + " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000 / duration),'numdot')
-
-  
+  gl.clear(gl.COLOR_BUFFER_BIT);
 
 }
-/*function sendTextToHTML(text, htmlID) {
-  var htmlElm = document.getElementById(htmlID);
-  if (!htmlElm) {
-    console.log("Failed to get " + htmlID+" from HTML");
-    return;
-  }
-  htmlElm.innerHTML=text;
-}*/
 
 function main() {
   setupWebGL();
   connectVariablesToGLSL();
   addActionsForUI();
   // Register function (event handler) to be called on a mouse press
-  canvas.onmousedown = click;
-  canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
+  //canvas.onmousedown = click;
+  //canvas.onmousemove = function (ev) { if (ev.buttons == 1) { click(ev) } };
 
   // Specify the color for clearing <canvas>
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  renderAllShapes();
+  //renderAllShapes();
+  renderScene();
 }
 
 /*
@@ -208,35 +198,3 @@ var g_points = [];  // The array for the position of a mouse press
 var g_colors = [];  // The array to store the color of a point
 var g_sizes = [];  
 */
-function click(ev) {
-  var x = ev.clientX; // x coordinate of a mouse pointer
-  var y = ev.clientY; // y coordinate of a mouse pointer
-  var rect = ev.target.getBoundingClientRect();
-
-  x = ((x - rect.left) - canvas.width / 2) / (canvas.width / 2);
-  y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
-
-  let point = new Point();
-  if (g_selectedType == POINT) {
-    point = new Point();
-  }
-  else if (g_selectedType==CIRCLE){
-    point = new Circle();
-  }
-  else {
-    point = new Triangle();
-  }
-
-  point.position = [x, y];
-  point.color = g_selectedColor.slice();
-  point.size = g_selectedSize;
-  g_shapesList.push(point);
-
-  /*// Store the coordinates to g_points array
-  g_points.push([x, y]);
-  g_colors.push(g_selectedColor.slice());
-  g_sizes.push(g_selectedSize);
-  //g_colors.push([g_selectedColor[0],g_selectedColor[1],g_selectedColor[2],g_selectedColor[3]]);
-*/
-  renderAllShapes();
-}
