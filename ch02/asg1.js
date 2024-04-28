@@ -45,6 +45,7 @@ let bonsaiSaveArray=[]
 let refImage=document.getElementById('img2')
 let u_ModelMatrix;
 
+
 let gAnimalGlobalRotation=0;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
   /*document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
@@ -170,7 +171,7 @@ function renderScene(){
   //beak
   translateM.setTranslate(0,.48,-.18);
   rotateM.setRotate(-5,.1,0,0);
-  scaleM.setScale(.07,.06,.10);
+  scaleM.setScale(.07,.06,.03);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
   modelMatrix.multiply(rotateM);
@@ -178,10 +179,10 @@ function renderScene(){
   rgba=[.7,.7,.7,1];
   drawCube(modelMatrix);
 
-  //beak
-  translateM.setTranslate(0,.50,-.3);
+  //beak (white front)
+  translateM.setTranslate(0,.50,-.27);
   rotateM.setRotate(-5,.1,0,0);
-  scaleM.setScale(.07,.03,.03);
+  scaleM.setScale(.07,.02,.07);
   modelMatrix.setIdentity();
   modelMatrix.multiply(translateM);
   modelMatrix.multiply(rotateM);
@@ -189,7 +190,7 @@ function renderScene(){
   rgba=[.7,.7,.7,1];
   drawCube(modelMatrix);
 
-  //beak
+  //beak (black)
   translateM.setTranslate(0,.42,-.3);
   rotateM.setRotate(-5,.1,0,0);
   scaleM.setScale(.07,.07,.03);
@@ -200,7 +201,7 @@ function renderScene(){
   rgba=[.02,.02,.02,1];
   drawCube(modelMatrix);
 
-  //beak
+  //beak (black)
   translateM.setTranslate(0,.40,-.25);
   rotateM.setRotate(-5,.1,0,0);
   scaleM.setScale(.07,.07,.06);
@@ -233,6 +234,7 @@ function renderScene(){
   rgba=[.8,.1,.6,1];
   drawCube(modelMatrix);
 
+  
   //left wing bottom
   translateM.setTranslate(-.2,-.04,.2);
   rotateM.setRotate(10,0,0,-.15);
