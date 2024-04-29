@@ -446,6 +446,7 @@ function renderAllShapes() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 
 }
+
 function sendTextToHTML(text,htmlID){
   var htmlElm=document.getElementById(htmlID);
   if(!htmlElm){
