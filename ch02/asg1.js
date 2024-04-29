@@ -161,7 +161,7 @@ function printBonsai(){
 }
 function updateAnimationAngles(){
   if(animate==true){
-    g_rLeg=40*Math.sin(g_seconds);
+    g_rLeg=40*Math.sin(g_seconds+11.1);
     wings=10*Math.sin(g_seconds);
     g_lLeg=-40*Math.sin(g_seconds);
   }
@@ -405,49 +405,6 @@ function renderScene(){
   modelMatrix.multiply(scaleM);
   rgba=[.6,.3,.6,1];
   drawCube(modelMatrix);
-
-  /*
-  if(g_lLeg>3){
-    if(checkg<.26){
-      checkg=g_lLeg/500
-      rotateN=g_lLeg
-      moveBottomL=0;
-    }
-  }
-  else if(-3<g_lLeg<3){
-    checkg=-g_lLeg/670
-    rotateN=g_lLeg*-.6;
-    if(moveBottomL>-.3){
-      moveBottomL=g_lLeg/160;
-    }
-  }
-  //left bottom part of leg
-  translateM.setTranslate(-.055,-.6+(checkg),.25+(moveBottomL));
-  rotateM.setRotate(rotateN,1,0,0);
-  lLegMatrix.scale(.8,1, .8);
-  modelMatrix.setIdentity();
-  modelMatrix.multiply(translateM);
-  modelMatrix.multiply(rotateM);
-  modelMatrix.multiply(scaleM);
-  rgba=[.6,.3,.6,1];
-  drawCube(modelMatrix);
-*/
-  //lLegMatrix.rotate((g_lLeg/1.5),.5,0,0);
-  /*rgba=[.6,.3,.6,1];
-  drawCube(lLegMatrix);*/
-  /*
-  if(g_lLeg<=-3){
-    if(aboveN2<2.4){
-      aboveN2=aboveN2+k;
-    }
-  }
-  else{
-    if(aboveN2>1.5){
-      aboveN2=aboveN2-k;
-    }
-  }
-  */
-  //-------------------------------------------------------------------
 
 }
 function renderAllShapes() {
