@@ -47,6 +47,23 @@ let u_ModelMatrix;
 let g_rLeg=15;
 let g_lLeg=15;
 let wings=10;
+let animate=false;
+let moveUp; 
+let moveBack; 
+let moveBackL; 
+let aboveN=1.8; 
+let aboveN2=1.8; 
+var k=.03
+let moveBottom;
+let checkgr=0;
+let rotateNr=0;
+
+let checkg=0;
+let rotateN=0;
+let moveBottomL;
+
+
+
 
 let gAnimalGlobalRotation=30;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
@@ -75,6 +92,9 @@ function addActionsForUI() { // used this resource "https://www.w3schools.com/ho
  document.getElementById('rLeg').addEventListener('mousemove', function () {g_rLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('lLeg').addEventListener('mousemove', function () {g_lLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('wings').addEventListener('mousemove', function () {wings=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
+ document.getElementById('on').onclick = function () {animate=true};
+ document.getElementById('off').onclick = function () {animate=false};
+
 
 
 }
@@ -139,13 +159,17 @@ function printBonsai(){
   //const imag = document.getElementById("img");
   //ctx.drawImage(imag,-80,-30,1460,800);
 }
-
+function updateAnimationAngles(){
+  if(animate==true){
+    g_rLeg=40*Math.sin(g_seconds);
+    wings=10*Math.sin(g_seconds);
+    g_lLeg=-40*Math.sin(g_seconds);
+  }
+}
 function renderScene(){
+
+  updateAnimationAngles();
   renderAllShapes();
-  //gl.enable(gl.DEPTH_TEST);
-  
-  //gl.uniform4f(u_FragColor,0,0,.5,1); //color of triangle
-  //drawTriangle3D([-1,0,0,-.5,-1,0,0,0,0]);
   
   let translateM= new Matrix4();
   let rotateM= new Matrix4();
@@ -241,7 +265,6 @@ function renderScene(){
   drawCube(modelMatrix);
 
   
-  let moveUp; 
   if(wings==10){
     moveUp=0;
   }
@@ -270,127 +293,161 @@ function renderScene(){
   rgba=[.8,.1,.5,1];
   drawCube(modelMatrix);
 
-  let moveBackL;
-    if(g_lLeg==15){
-      moveBackL=0;
+  if(g_lLeg==15){
+    moveBackL=0;
+  }
+  else{
+    moveBackL=(g_lLeg-15)/500;
+  }
+
+  //right leg
+  if(g_rLeg==15){
+    moveBack=0;
+  }
+  else{
+    moveBack=(g_rLeg-15)/500;
+  }
+
+  translateM.setTranslate(.055,-.3,.25+(moveBack));
+  rotateM.setRotate(g_rLeg,-.5,0,0);
+  scaleM.setScale(.03,.17,.03);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.6,.3,.6,1];
+  drawCube(modelMatrix);
+  
+  //right joint
+  var rLegMatrix=new Matrix4();
+  rLegMatrix.set(modelMatrix);
+  rLegMatrix.scale(1.6,.28, 1.7);
+  rLegMatrix.translate(0,-2.6,0);
+  rLegMatrix.rotate(g_rLeg/1.5,.5,0,0);
+  rgba=[.8,.1,.6,1];
+  drawCube(rLegMatrix);
+
+  
+  //right bottom part of leg
+  if(g_rLeg>3){
+    if(checkgr<.26){
+      checkgr=g_rLeg/500
+      rotateNr=g_rLeg
+      moveBottom=0;
     }
-    else{
-      moveBackL=(g_lLeg-15)/500;
+  }
+  else if(-3<g_rLeg<3){
+    checkgr=-g_rLeg/670
+    rotateNr=g_rLeg*-.6;
+    if(moveBottom>-.3){
+      moveBottom=g_rLeg/160;
     }
+  }
 
-    //right leg
-    let moveBack;
-    if(g_rLeg==15){
-      moveBack=0;
+  translateM.setTranslate(.055,-.6+(checkgr),.25+(moveBottom));
+  rotateM.setRotate(rotateNr,1,0,0);
+  rLegMatrix.scale(.8,1, .8);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.6,.3,.6,1];
+  drawCube(modelMatrix);
+
+//-------------------------------------------------------------------
+  translateM.setIdentity();
+  scaleM.setIdentity();
+  rotateM.setIdentity();
+
+  //left leg 
+  translateM.setTranslate(-.055,-.3,.25+(moveBackL));
+  rotateM.setRotate(g_lLeg,-.5,0,0);
+  scaleM.setScale(.03,.17,.03);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.6,.3,.6,1];
+  drawCube(modelMatrix);
+
+
+  //left joint
+  var lLegMatrix=new Matrix4();
+  lLegMatrix.set(modelMatrix);
+  lLegMatrix.scale(1.6,.28, 1.8);
+  lLegMatrix.translate(0,-2.6,0);
+  lLegMatrix.rotate(g_lLeg/1.5,.5,0,0);
+  rgba=[.8,.1,.6,1];
+  drawCube(lLegMatrix);
+
+  //left bottom part of leg
+  if(g_lLeg>3){
+    if(checkg<.26){
+      checkg=g_lLeg/500
+      rotateN=g_lLeg
+      moveBottomL=0;
     }
-    else{
-      moveBack=(g_rLeg-15)/500;
+  }
+  else if(-3<g_lLeg<3){
+    checkg=-g_lLeg/670
+    rotateN=g_lLeg*-.6;
+    if(moveBottomL>-.3){
+      moveBottomL=g_lLeg/160;
     }
+  }
 
-    translateM.setTranslate(.055,-.3,.25+(moveBack));
-    rotateM.setRotate(g_rLeg,-.5,0,0);
-    scaleM.setScale(.03,.17,.03);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-    
-    //right joint
-    var rLegMatrix=new Matrix4();
-    rLegMatrix.set(modelMatrix);
-    rLegMatrix.scale(1.6,.28, 1.7);
-    rLegMatrix.translate(0,-2.6,0);
-    rLegMatrix.rotate(g_rLeg/1.5,.5,0,0);
-    rgba=[.8,.1,.6,1];
-    drawCube(rLegMatrix);
+  translateM.setTranslate(-.055,-.6+(checkg),.25+(moveBottomL));
+  rotateM.setRotate(rotateN,1,0,0);
+  scaleM.setScale(.03,.17,.03);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.6,.3,.6,1];
+  drawCube(modelMatrix);
 
-    //right bottom
-    let aboveN=1.5;
-    if(g_rLeg<-11){
-      aboveN=2.4;
+  /*
+  if(g_lLeg>3){
+    if(checkg<.26){
+      checkg=g_lLeg/500
+      rotateN=g_lLeg
+      moveBottomL=0;
     }
-    else{
-      aboveN=1.5;
+  }
+  else if(-3<g_lLeg<3){
+    checkg=-g_lLeg/670
+    rotateN=g_lLeg*-.6;
+    if(moveBottomL>-.3){
+      moveBottomL=g_lLeg/160;
     }
-    translateM.setTranslate(.055,-.55,.26+aboveN*(moveBack));
-    rotateM.setRotate(Math.abs(g_rLeg/2),.5,0,0);
-    scaleM.setScale(.03,.18,.03);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-
-    
-    // right bottom floor
-    translateM.setTranslate(.055,-.74+aboveN/55,.22+(aboveN*(moveBack)-.05));
-    rotateM.setRotate((.09-g_rLeg/2),.5,0,0);
-    scaleM.setScale(.05,.03,.09);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-
-
-    //left leg 
-    translateM.setTranslate(-.055,-.3,.25+(moveBackL));
-    rotateM.setRotate(g_lLeg,-.5,0,0);
-    scaleM.setScale(.03,.17,.03);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-
-
-    //left joint
-    var lLegMatrix=new Matrix4();
-    lLegMatrix.set(modelMatrix);
-    lLegMatrix.scale(1.6,.28, 1.7);
-    lLegMatrix.translate(0,-2.6,0);
-    lLegMatrix.rotate(g_lLeg/1.5,.5,0,0);
-    rgba=[.8,.1,.6,1];
-    drawCube(lLegMatrix);
-
-    let aboveN2=1.5;
-    if(g_lLeg<=-3){
-      if(aboveN2<2.4){
-        aboveN2=aboveN2+1;
-      }
+  }
+  //left bottom part of leg
+  translateM.setTranslate(-.055,-.6+(checkg),.25+(moveBottomL));
+  rotateM.setRotate(rotateN,1,0,0);
+  lLegMatrix.scale(.8,1, .8);
+  modelMatrix.setIdentity();
+  modelMatrix.multiply(translateM);
+  modelMatrix.multiply(rotateM);
+  modelMatrix.multiply(scaleM);
+  rgba=[.6,.3,.6,1];
+  drawCube(modelMatrix);
+*/
+  //lLegMatrix.rotate((g_lLeg/1.5),.5,0,0);
+  /*rgba=[.6,.3,.6,1];
+  drawCube(lLegMatrix);*/
+  /*
+  if(g_lLeg<=-3){
+    if(aboveN2<2.4){
+      aboveN2=aboveN2+k;
     }
-    else{
-      if(aboveN2>1.5){
-        aboveN2=aboveN2-1;
-      }
+  }
+  else{
+    if(aboveN2>1.5){
+      aboveN2=aboveN2-k;
     }
-    console.log(aboveN2);
-    // left bottom
-    translateM.setTranslate(-.055,-.55,.26+aboveN2*(moveBackL));
-    rotateM.setRotate(Math.abs(g_lLeg/2),.5,0,0);
-    scaleM.setScale(.03,.18,.03);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
-
-    // left bottom floor
-    translateM.setTranslate(-.055,-.74+aboveN2/55,.22+(aboveN2*(moveBackL)-.05));
-    rotateM.setRotate((.09-g_lLeg/2),.5,0,0);
-    scaleM.setScale(.05,.03,.09);
-    modelMatrix.setIdentity();
-    modelMatrix.multiply(translateM);
-    modelMatrix.multiply(rotateM);
-    modelMatrix.multiply(scaleM);
-    rgba=[.6,.3,.6,1];
-    drawCube(modelMatrix);
+  }
+  */
+  //-------------------------------------------------------------------
 
 }
 function renderAllShapes() {
@@ -425,9 +482,17 @@ function main() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   //renderAllShapes();
-  renderScene();
+  //renderScene();
+  requestAnimationFrame(tick);
 }
+var g_startTime=performance.now()/1000;
+var g_seconds=performance.now()/1000-g_startTime;
 
+function tick(){
+  g_seconds=performance.now()/1000-g_startTime;
+  renderScene();
+  requestAnimationFrame(tick);
+}
 /*
 var g_points = [];  // The array for the position of a mouse press
 var g_colors = [];  // The array to store the color of a point
