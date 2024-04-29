@@ -67,36 +67,12 @@ let moveBottomL;
 
 let gAnimalGlobalRotation=30;
 function addActionsForUI() { // used this resource "https://www.w3schools.com/howto/howto_js_rangeslider.asp"
-  /*document.getElementById('clear').onclick = function () { g_shapesList = []; renderAllShapes();};
-  document.getElementById('delete').onclick = function () { g_shapesList.splice(-1); renderAllShapes();}; // wanted to add this function because thought it might be helpful for drawing 
-  //document.getElementById('bonsai').onclick = function () {saveBonsai(); console.log(g_shapesList);};
-  document.getElementById('bonsaip').onclick = function () {canvas.style.display = "none"; renderAllShapes(); display2.style.display="block"; refImage.style.display="block";printBonsai();};
-  document.getElementById('return').onclick = function () {canvas.style.display = "block"; renderAllShapes(); display2.style.display="none"; refImage.style.display="none"};
-
-  document.getElementById('fliph').onclick = function () {if(g_fliph==false){g_fliph=true}else{g_fliph=false};}; // wanted to add this function because thought it might be helpful for drawing 
-  document.getElementById('flipv').onclick = function () {if(g_flipv==false){g_flipv=true}else{g_flipv=false};}; // wanted to add this function because thought it might be helpful for drawing 
-  document.getElementById('redS').addEventListener('mouseup', function () { g_selectedColor[0] = this.value / 100;}); //g_selectedColor[0]=this.value/100;
-  document.getElementById('blueS').addEventListener('mouseup', function () { g_selectedColor[2] = this.value / 100;});
-  document.getElementById('greenS').addEventListener('mouseup', function () { g_selectedColor[1] = this.value / 100;});
-  document.getElementById('size').addEventListener('mouseup', function () { g_selectedSize = this.value;});
-  document.getElementById('square').onclick = function () { g_selectedType = POINT};
-  document.getElementById('triangle').onclick = function () { g_selectedType = TRIANGLE};
-  document.getElementById('circle').onclick = function () { g_selectedType = CIRCLE};
-  document.getElementById('segment').addEventListener('mouseup', function () { g_segment= this.value;}); //g_selectedColor[0]=this.value/100;
-  document.getElementById('eql').onclick = function () {if(g_eql==false){g_eql=true}else{g_eql=false};};
-  document.getElementById('width').addEventListener('mouseup', function () { g_width= this.value; console.log('g_width'+g_width);}); //g_selectedColor[0]=this.value/100;
-  document.getElementById('height').addEventListener('mouseup', function () { g_height= this.value; }); //g_selectedColor[0]=this.value/100;
-*/
-  //document.getElementById('camera').addEventListener('mouseup', function () {gAnimalGlobalRotation=this.value; renderAllShapes();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('camera').addEventListener('mousemove', function () {gAnimalGlobalRotation=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('rLeg').addEventListener('mousemove', function () {g_rLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('lLeg').addEventListener('mousemove', function () {g_lLeg=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('wings').addEventListener('mousemove', function () {wings=this.value; renderScene();}); //g_selectedColor[0]=this.value/100;
  document.getElementById('on').onclick = function () {animate=true};
  document.getElementById('off').onclick = function () {animate=false};
-
-
-
 }
 
 function setupWebGL() {
@@ -405,6 +381,13 @@ function renderScene(){
   modelMatrix.multiply(scaleM);
   rgba=[.6,.3,.6,1];
   drawCube(modelMatrix);
+
+  let footL=Matrix4();
+  footL.set(modelMatrix);
+  footL.translate(0,-1,0);
+  rgba=[.2,.0,.2,1];
+  drawCube(footL);
+
 
 }
 function renderAllShapes() {
