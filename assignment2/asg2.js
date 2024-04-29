@@ -169,6 +169,8 @@ function updateAnimationAngles(){
 }
 function renderScene(){
 
+  var startTime=performance.now();
+
   updateAnimationAngles();
   renderAllShapes();
   
@@ -422,6 +424,10 @@ function renderScene(){
   rgba=[.6,.3,.6,1];
   drawCube(footl);
 
+  
+  var duration = performance.now()-startTime;
+  sendTextToHTML(("ms:" + Math.floor(duration)+" fps:"+ Math.floor(10000/duration)/10), "numdot")
+
 }
 function renderAllShapes() {
   //var startTime = performance.now();
@@ -440,7 +446,14 @@ function renderAllShapes() {
   gl.clear(gl.COLOR_BUFFER_BIT);
 
 }
-
+function sendTextToHTML(text,htmlID){
+  var htmlElm=document.getElementById(htmlID);
+  if(!htmlElm){
+    console.log("Failed to get " + htmlID+" from HTML");
+    return;
+  }
+  htmlElm.innerHTML=text;
+}
 function main() {
   setupWebGL();
   connectVariablesToGLSL();
